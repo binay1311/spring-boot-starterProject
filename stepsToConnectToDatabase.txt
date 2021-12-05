@@ -1,0 +1,41 @@
+I havent downloaded and installed postgresql for creating database since postgres installation errors out if we have antivirus enabled.
+
+1. I have first created a docker container using
+docker run -d --rm --name student -e POSTGRES_PASSWORD=admin -e POSTGRES_USER=postgres -p 5432:5432 postgres:12
+
+2. Then run the springboot application from intellij by commenting out sprinboot-jpa starter dependency.
+
+3. then create a server in pgadmin
+name it student
+Host name/address : localhost
+Port : 5432
+username : postgres
+password : admin
+
+(username and password should be copied from your springboot's application.properties)
+
+4. Add 
+    @Id
+    @SequenceGenerator(
+            name = "student_sequence",
+            sequenceName = "student_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "student_sequence"
+    )
+ in class Student.java
+
+5. uncomment sprinboot -jpa dependency and Try to re-run the springboot application to create student table but it will error out since there isn't any student database.
+
+6. go to pgadmin : student : Query Editor: now create the database (CREATE DATABASE student;)
+
+7. now again run the springboot application, you can see in the console that the table student gets created
+
+Now we want to import the database in intellij
+8. Go to intellij : Database(top right corner) : Import Data Sources
+
+9. import demo/hibernate , test the connection , it will be connected and hence database is imported in intellij
+
+
